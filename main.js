@@ -7,32 +7,26 @@ let inputs = document.querySelectorAll('.operations .input')
 
 let numsArr = [];
 let operationArr = ['/','x','-','+'];
-let before ;
-let after ;
-let inputOperation ; 
-let result ;
-
+let nums ;
+let totalArr = [];
+let result;
 
 inputs.forEach(ele => {
     ele.addEventListener('click',function(e) {
         let ops = e.target.getAttribute('value');
-        if (operationArr.includes(ops)){
-            inputOperation = ops;
-            display.textContent = ops;
-            before = numsArr.join('');
-            numsArr = [];
-        } else {
-            if (before === undefined){
-                numsArr.push(ops);
-                display.textContent = numsArr.join("");
-            } else if (before !== undefined){
-                numsArr.push(ops);
-                after = numsArr.join("");
-                display.textContent = after;
-            }
+        if (!operationArr.includes(ops)){
+            numsArr.push(ops)
+            nums = numsArr.join("")            
+            display.textContent = nums
         }
+        if (operationArr.includes(ops)) {
+            numsArr = []
+            display.textContent = ops
+            totalArr.push(nums, ops)
+        } 
     })
 })
+
 
 
 del.onclick = () => {
@@ -40,44 +34,71 @@ del.onclick = () => {
     let contentArr = content.split('');
     if (contentArr.length > 1){
         contentArr.pop()
-        display.textContent = contentArr.join('')
+        nums = contentArr.join('')
+        numsArr = []
+        result = nums;
+        display.textContent = nums
     } else {
+        nums = '0'
         display.textContent = '0'
     }
-    
 }
 
 reset.onclick = () => {
     numsArr = [];
-    before = '';
-    after = '';
-    inputOperation = '';
-    result = '';
-    display.textContent = '0'
+    nums = '';
+    totalArr = []
+    display.textContent = '0';
 }
 
 
 calc.onclick = function() {
-    switch (inputOperation) {
-        case '+':
-            result = +before + +after;
-            break;
-        case '-':
-            result = +before - +after;
-            break;
-        
-        case 'x':
-            result = +before * +after;
-            break;
-        
-        case '/':
-            result = +before / +after;
-            break;
 
-        default:
-            break;
-    }
-    display.textContent = result;
+
     numsArr = []
+    totalArr.push(nums)
+    console.log('totalArr: ' + totalArr)
+    let before ;
+    let after ;
+
+    totalArr.forEach((e,i,arr) => {
+        if (operationArr.includes(e)){
+            // console.log(result)
+            if (result === undefined || result === null){
+                before = arr[i - 1];
+                after = arr[i + 1];
+                console.log('before: ' + before)
+                console.log('after: ' + after)
+                
+            } else {
+                before = result
+                after = arr[i + 1];
+                console.log('before else: ' + before)
+                console.log('after else: ' + after)
+            }
+
+            switch (e) {
+                case '+':
+                    result = +before + +after;
+                    break;
+                case '-':
+                    result = +before - +after;
+                    break;
+                
+                case 'x':
+                    result = +before * +after;
+                    break;
+                
+                case '/':
+                    result = +before / +after;
+                    break;
+            
+                default:
+                    break;
+            }
+            console.log("result : " + result)
+        }
+    })
+    display.textContent = result;
 }
 
