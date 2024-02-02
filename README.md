@@ -4,7 +4,7 @@
 
 ## Try it Live!
 
-Check out the live app [My Calculator]()
+Check out the live app [My Calculator](https://my-calculator-demo.vercel.app/)
 
 ## Tools Used
 
